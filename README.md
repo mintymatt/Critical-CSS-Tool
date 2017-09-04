@@ -16,7 +16,26 @@ A small step-by-step guide to setting up this project:
 
 Install mode_modules: `npm install`
 
-Open up gulpfile.js, and enter the correct details of your target. An example of this can be found under the `/test` directory.
+Open up gulpfile.js, and configure a view. Below is an example, taken from `/tests`:
+
+```
+{
+	name: "desktop",										//just a display name for the view
+	uri: global_uri,										//URI. This is the target URL or local file.
+	sourceCSS: "public_html/css/bootstrap.css",				//css file. MUST be local.
+	criticalDest: "public_html/css/critical.mobile.css",	//destination file for critical css.
+	browser: {
+		width: 500,											// headless browser width
+		height: 500,										// ^ height
+		strict: false,										// strict mode for styling?
+		renderWaitTime: 100,								// amount of time allowed to render, before capping.
+		timeout: 30000,										// total timeout.
+		blockjs: true 										// block javascript requests.
+	}
+},
+```
+
+You will also need to set a default URI. This points all views to a default document (usually `.html`). This can be a URL, or a local file. You can override each view's URI, simple by removing the reference to `global_uri` and replacing it with an appropriate URI string value.
 
 
 ## Using
@@ -25,15 +44,13 @@ For Windows:
 Open/Execute `gen.bat`
 
 Other Playforms:
-Enter a command prompt, and navigate to the root directory of this installation. Assuming you have configured the target inside `gulpfile.js`, you can proceed with the command `gulp`
+Enter a command prompt, and navigate to the root directory of this installation. Assuming you have configured the target inside `gulpfile.js`, you can proceed with the command `gulp criticalCss`
 
-You will be presented with a prompt to enter the URL of the target, and then asked where to output the final result. You shouldn't need to change these details, and can simply confirm the default values (set inside `gulpfile.js`) by hitting enter.
-
-When completed (with no errors) a file containing critical css will be generated (by default in the same directory with the name `outfile.css`). This will contain the related critical css.  You should follow other examples elsewhere, but on a basic level this critical CSS should be included in `<style></style>` tags within the target document.
+You will see information regarding each view as they are processed, and critical CSS is generated.
 
 ## Example use of critical CSS, using PHP
 
-Critical CSS should only need to be used once, as after the first complete load of a page the user should have a cached edition of our stylesheets. Therefore we can use a cookie to determine whether a visitor has seen our website yet, and decide if we need to provide them with ciritical CSS. Here is a basic example:
+Critical CSS should only need to be used once, as after the first complete load of a page the user should have a cached edition of our stylesheets. Therefore we can use a cookie to determine whether a visitor has seen our website yet, and decide if we need to provide them with ciritical CSS. Here is a basic example (taken from `/test`):
 
 ```
 <?php
