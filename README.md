@@ -33,6 +33,8 @@ When completed (with no errors) a file containing critical css will be generated
 
 ## Example use of critical CSS, using PHP
 
+Critical CSS should only need to be used once, as after the first complete load of a page the user should have a cached edition of our stylesheets. Therefore we can use a cookie to determine whether a visitor has seen our website yet, and decide if we need to provide them with ciritical CSS. Here is a basic example:
+
 ```
 <?php
 	if (empty($_COOKIE['first_visit'])):	//if cookie doesn't exist (i.e. new visitor)
