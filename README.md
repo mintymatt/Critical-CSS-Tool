@@ -25,6 +25,31 @@ Enter a command prompt, and navigate to the root directory of this installation.
 
 You will be presented with a prompt to enter the URL of the target, and then asked where to output the final result. You shouldn't need to change these details, and can simply confirm the default values (set inside `gulpfile.js`) by hitting enter.
 
+When completed (with no errors) a file containing critical css will be generated (by default in the same directory with the name `outfile.css`). This will contain the related critical css.  You should follow other examples elsewhere, but on a basic level this critical CSS should be included in `<style></style>` tags within the target document.
+
+## Example use of critical CSS, using PHP
+
+```
+<?php
+
+	if (empty($_COOKIE['first_visit'])):	//if cookie doesn't exist (i.e. new visitor)
+		
+		setcookie('first_visit',true,time()+864000,'/','',0); //set cookie for first visit. Expires in 10 days.
+
+		?>
+		
+			<style>
+				//critical css style rules here...
+			</style>
+
+		<?php
+
+	endif
+
+?>
+
+```
+From here you would want to load any remaining stylehseets seperately (perhaps after page load with JavaScript and noscript support).
 
 ## License
 
