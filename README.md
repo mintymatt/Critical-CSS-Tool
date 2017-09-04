@@ -35,21 +35,14 @@ When completed (with no errors) a file containing critical css will be generated
 
 ```
 <?php
-
 	if (empty($_COOKIE['first_visit'])):	//if cookie doesn't exist (i.e. new visitor)
-		
 		setcookie('first_visit',true,time()+864000,'/','',0); //set cookie for first visit. Expires in 10 days.
-
 		?>
-		
 			<style>
-				//critical css style rules here...
+			//critical css style rules here...
 			</style>
-
 		<?php
-
 	endif
-
 ?>
 
 ```
