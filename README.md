@@ -21,11 +21,9 @@ Open up gulpfile.js, and enter the correct details of your target. An example of
 
 ## Using
 
-Enter a command prompt, and navigate to the root directory of this installation. Assuming you have configured the target inside `gulpfile.js`, you can proceed with the following command:
+Enter a command prompt, and navigate to the root directory of this installation. Assuming you have configured the target inside `gulpfile.js`, you can proceed with the command `gulp`
 
-`gulp`
-
-Here you will be presented with a prompt to enter the URL of the target, and then asked where to output the final result. Shouldn't need to change these details, and can simply confirm the default values set inside `gulpfile.js` by hitting enter.
+You will be presented with a prompt to enter the URL of the target, and then asked where to output the final result. You shouldn't need to change these details, and can simply confirm the default values (set inside `gulpfile.js`) by hitting enter.
 
 
 ## License
