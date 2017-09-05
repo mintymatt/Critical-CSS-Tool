@@ -236,6 +236,19 @@ $.gulp.task('init',function(){
 
 /**
  *
+ * Gulp Task: 	Minify all critical CSS files.
+ *
+ */
+ $.gulp.task('minify',['init'],function(){
+ 	$.gulp.src(output_dest+'*.css')
+        .pipe($.cssmin())
+        .pipe($.rename({suffix: '.min'}))
+        .pipe($.gulp.dest(output_dest));
+    console.log("\n\nCompleted. Minified files renamed: `[filename].min.css`\n\n");
+ });
+
+/**
+ *
  * Gulp Task: 	Clear all saved CSS files (both downloaded and critical)
  *
  */
