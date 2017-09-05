@@ -1,6 +1,6 @@
 # Critical Css Gen
 
-A neat tunnel into Penthouse, used to generate critical css. This has been designed to be incorperated into your normal gulpfile.
+A tool that utilises Penthouse and other NPM Packages, to generate clean critical CSS.
 
 ## Getting Started
 
@@ -10,44 +10,36 @@ These instructions will get you a copy of the project up and running on your loc
 
 *Node.js
 
-### Installing
+### Download
 
-A small step-by-step guide to setting up this project:
+`git clone https://github.com/mintymatt/criticalcssgen.git`
 
-Install mode_modules: `npm install`
+https://github.com/mintymatt/criticalcssgen/archive/master.zip
 
-Open up gulpfile.js, and configure a view. Below is an example, taken from `/tests`:
+## Setup
 
-```
-{
-	name: "desktop",					//just a display name for the view
-	uri: global_uri,					//URI. This is the target URL or local file.
-	sourceCSS: "public_html/css/bootstrap.css",		//css file. MUST be local.
-	criticalDest: "public_html/css/critical.mobile.css",	//destination file for critical css.
-	browser: {
-		width: 500,					// headless browser width
-		height: 500,					// ^ height
-		strict: false,					// strict mode for styling?
-		renderWaitTime: 100,				// amount of time allowed to render, before capping.
-		timeout: 30000,					// total timeout.
-		blockjs: true 					// block javascript requests.
-	}
-},
-```
+Install node_modules: `npm install`
 
-You will also need to set a default URI. This points all views to a default document (usually `.html`). This can be a URL, or a local file. You can override each view's URI, simple by removing the reference to `global_uri` and replacing it with an appropriate URI string value.
+Open up gulpfile.js, and configure the options. For basic use, you should only need to specify the target website:
 
-`const global_uri = "http://getboostrap.com";`
+`const global_uri = 'http://getbootstrap.com';`
+
+The target can be a remote location, or a local file (advise the use of an absolute path for the latter).
 
 ## Usage
 
-For Windows:
-Open/Execute `gen.bat`
+The proccess of this tool is as follows:
 
-Windows and Other Playforms:
-Enter a command prompt, and navigate to the root directory of this installation. Execute the command `gulp criticalCss`.
+*Set target in `gulpfile.js`
 
-You will see information regarding each view as they are processed, and critical CSS is generated.
+*Define desired views.
+
+*Download the target's CSS files. Command: `gulp download`
+
+*Generate Critical CSS.	Command: `gulp critical`
+
+
+Note that if your target is remote, you will need a connection throughout the proccess.
 
 ## Example use of critical CSS, using PHP
 
@@ -59,7 +51,7 @@ Critical CSS should only need to be used once, as after the first complete load 
 		setcookie('first_visit',true,time()+864000,'/','',0); //set cookie for first visit. Expires in 10 days.
 		?>
 			<style>
-			//critical css style rules here...
+			//critical css style rules here. perhaps use file_get_contents()
 			</style>
 		<?php
 	endif
