@@ -66,6 +66,10 @@ Critical CSS should only need to be used once, as after the first complete load 
 ```
 From here you would want to load any remaining stylehseets seperately (perhaps after page load with JavaScript and noscript support).
 
+## Notes
+
+With smaller downloaded CSS files you won't motice big file size differences between seperate critical CSS views.
+
 ## License
 
 This project is licensed under the MIT License.
