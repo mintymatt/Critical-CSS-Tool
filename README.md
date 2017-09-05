@@ -2,6 +2,8 @@
 
 A tool that utilises Penthouse and other NPM Packages, to generate clean critical CSS.
 
+More information about Critical CSS: https://dbushell.com/2015/02/19/critical-css-and-performance/
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
