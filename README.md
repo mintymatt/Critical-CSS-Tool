@@ -57,6 +57,8 @@ gulp minify
 gulp clean
 ```
 
+Under `/test` you can find a shell executable which automatically runs through these tasks in one go (except gulp clean).
+
 ## Example use of critical CSS, using PHP
 
 Critical CSS should only need to be used once, as after the first complete load of a page the user should have a cached edition of our stylesheets. Therefore we can use a cookie to determine whether a visitor has seen our website yet, and decide if we need to provide them with ciritical CSS. Here is a basic example (taken from `/test`):
