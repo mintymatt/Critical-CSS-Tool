@@ -1,8 +1,6 @@
 # Critical Css Gen
 
-A neat tunnel into Penthouse, used to generate critical css. This has been designed to be incorperated into your normal gulpfile, or used standalone.
-
-This tool allows you to retrieve the critical CSS files of a website page (referred to as target).
+A tool that utilises Penthouse and other NPM Packages, to generate clean critical CSS.
 
 ## Getting Started
 
@@ -20,7 +18,7 @@ https://github.com/mintymatt/criticalcssgen/archive/master.zip
 
 ## Setup
 
-Install mode_modules: `npm install`
+Install node_modules: `npm install`
 
 Open up gulpfile.js, and configure the options. For basic use, you should only need to specify the target website:
 
