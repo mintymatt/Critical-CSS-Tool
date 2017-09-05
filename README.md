@@ -5,6 +5,7 @@ A tool that utilises Penthouse and other NPM Packages, to generate clean critica
 More information about Critical CSS: 
 
 https://dbushell.com/2015/02/19/critical-css-and-performance/
+
 https://css-tricks.com/authoring-critical-fold-css/
 
 ## Getting Started
