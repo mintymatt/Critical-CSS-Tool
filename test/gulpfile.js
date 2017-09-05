@@ -1,30 +1,51 @@
+//################################################################################################
+//	Load Plugins
+//################################################################################################
+
 const $ = require('gulp-load-plugins')({
     pattern: ['*'],
     scope: ['devDependencies']
 });
 const pkg = require('./package.json');
 
+
 //################################################################################################
-//	Optional Variables
+//	Options. Customize as needed...
 //################################################################################################
 
-//Default URL/FILE location:
-//if needed, you can safely overide this value in each view.
-const global_uri = "http://getbootstrap.com";
 
 
-// Enter as many views as needed. The bigger the browser dimensions, the longer the view will take to render.
-// You can specify the same same criticalDestination in different views. Following views simply append.
+// @var global_uri = target document. Can be local or remote.
+const global_uri = "";
 
+// @var download_dest = folder to save downloaded target CSS files.
+const download_dest = './critical-css/download/';
+
+// @var output_dest = folder to output critical files.
+const output_dest = './critical-css/output/';
+
+// @var blacklist = downloaded CSS files that should be ignored.
+var blacklist = [
+	''
+];
+
+/**
+ *
+ *	This is used to store each desired view. A view creates a unique critical CSS file. 
+ *	This is best used to create critical CSS files for different browser dimensions, 
+ *	to cater for different devices.
+ *
+ * 	@var views = Array of view objects.
+ *
+ */
 var views = [
 	{
-		name: "mobile",
+		name: "desktop",
 		uri: global_uri,
-		sourceCSS: "public_html/css/bootstrap.css",
-		criticalDest: "public_html/css/critical.mobile.css",
+		criticalDest: output_dest+"critical.desktop.css",
 		browser: {
-			width: 500,
-			height: 500,
+			width: 1300,
+			height: 900,
 			strict: false,
 			renderWaitTime: 100,
 			timeout: 30000,
@@ -34,25 +55,10 @@ var views = [
 	{
 		name: "tablet",
 		uri: global_uri,
-		sourceCSS: "public_html/css/bootstrap.css",
-		criticalDest: "public_html/css/critical.tablet.css",
+		criticalDest: output_dest+"critical.tablet.css",
 		browser: {
-			width: 1000,
-			height: 1000,
-			strict: false,
-			renderWaitTime: 100,
-			timeout: 30000,
-			blockjs: true
-		}
-	},
-	{
-		name: "desktop",
-		uri: global_uri,
-		sourceCSS: "public_html/css/bootstrap.css",
-		criticalDest: "public_html/css/critical.desktop.css",
-		browser: {
-			width: 1300,
-			height: 1300,
+			width: 900,
+			height: 750,
 			strict: false,
 			renderWaitTime: 100,
 			timeout: 30000,
@@ -62,39 +68,10 @@ var views = [
 	{
 		name: "mobile",
 		uri: global_uri,
-		sourceCSS: "public_html/css/docs.min.css",
-		criticalDest: "public_html/css/critical.mobile.css",
+		criticalDest: output_dest+"critical.mobile.css",
 		browser: {
 			width: 500,
 			height: 500,
-			strict: false,
-			renderWaitTime: 100,
-			timeout: 30000,
-			blockjs: true
-		}
-	},
-	{
-		name: "tablet",
-		uri: global_uri,
-		sourceCSS: "public_html/css/docs.min.css",
-		criticalDest: "public_html/css/critical.tablet.css",
-		browser: {
-			width: 1000,
-			height: 1000,
-			strict: false,
-			renderWaitTime: 100,
-			timeout: 30000,
-			blockjs: true
-		}
-	},
-	{
-		name: "desktop",
-		uri: global_uri,
-		sourceCSS: "public_html/css/docs.min.css",
-		criticalDest: "public_html/css/critical.desktop.css",
-		browser: {
-			width: 1300,
-			height: 1300,
 			strict: false,
 			renderWaitTime: 100,
 			timeout: 30000,
@@ -102,103 +79,216 @@ var views = [
 		}
 	}
 ];
+
+
 //################################################################################################
-//	End of options
+//	Functions
 //################################################################################################
-var truncated = [], time = 0;
-function criticalGen(i){
-	var view = views[i];
-	$.clear();
-	$.fs.access(view.sourceCSS,(err)=>{
-		if (err){
-			$.fancyLog('Source CSS file cannot be found ==> '+view.sourceCSS);
-		}
-		else {
-			$.fancyLog('\n\nView Name: '+view.name+'\nID: '+i+'\nsourceCSS: '+view.sourceCSS+" URI: "+view.uri+"\n");
-			$.fancyLog('\n\nBrowser options:\n'+dump(view.browser));
-			$.fancyLog('Running Penthouse (and PhantomJS).\n\n');
-			var animate_b = true,animate = setInterval(function(){
-				process.stdout.write("=");
-				time+=100;
-			},100);
-			$.penthouse(
-				{
-					url: view.uri,
-					css: view.sourceCSS,
-					width: view.browser.width,
-					height: view.browser.height,
-					forceInclude: [],
-					timeout: view.browser.timeout,
-					strict: view.browser.strict,
-					maxEmbeddedBase64Length: 1000,
-					userAgent: "Penthouse Critical Path CSS Generator",
-					renderWaitTime: view.browser.renderWaitTime,
-					blockJsRequests: view.browser.blockjs,
-					phantomJsOptions: {
-						//
-					},
-					customPageHeaders: {
-						"Accept-Encoding":"identity"
-					}
-				})
-				.then(criticalCss => {
-					clearInterval(animate);
-					process.stdout.write("\n");
-					$.fancyLog("Appending to "+view.criticalDest);
-					$.fs.appendFileSync(view.criticalDest,criticalCss);
-					$.fancyLog("Done.");
-					if (i+1==views.length){
-						$.clear();
-						$.fancyLog("\n\nCompleted last view.\n\nAll Views took Aprox. "+time/1000+" Seconds.\n\nApplication will close automatically. Otherwise enter shortcut CTRL+C");
-					}
-					else {
-						criticalLoop(i+1);
-					}
-				})
-				.catch(err => {
-					$.fancyLog("");
-					$.fancyLog("Error: "+err);
-				});
-		}
-	});
-	return true;
-}
-function criticalLoop(i){
-	var view = views[i];
-	if (view!=null){
-		if (!contains(truncated,view.criticalDest)){
+
+/**
+ *
+ *	@var truncated = stores critical css destination files that have been emptied.
+ *
+ *	@var css_files = array of files downloaded from the target website.
+ *
+ *	@var current_view = index of current view in loop. Default 0.
+ *
+ *	@var time = used to calculate operation time.
+ *
+ */
+var truncated = css_files = [], current_view = time = 0;
+
+
+/**
+ *
+ * This is the main looping function, that iterates through each stylesheet * views. Only one Penthouse object at any time.
+ *
+ * @param i = current stylesheet index. Resets to 0 each view.
+ *
+ */
+function loop(i){
+	var view = views[current_view];
+	var stylesheet = css_files[i];
+	if (view!=null && stylesheet != null){
+		if (!contains(truncated,view.criticalDest)){ //truncate destination files once.
 			$.fancyLog("Truncating previous version of file ==> "+view.criticalDest+"\n");
 			$.fs.truncate(view.criticalDest,'',function(){
 				truncated.push(view.criticalDest);
-				view = null;
-				criticalGen(i);
 			});
 		}
-		else {
-			view = null;
-			criticalGen(i);
-		}
+		$.clear();
+		$.fancyLog('\n\nView Name: '+view.name+'\nStylesheet: '+stylesheet+"\nURI: "+view.uri+"\n");
+		console.log('\n\nBrowser options:\n'+dump(view.browser));
+		console.log('Running Penthouse (and PhantomJS).\n');
+		console.log(Math.floor((time/(1000*60))%60)+'m '+((time/1000)%60).toFixed(1)+'s Time Elalpsed\n');
+		time==0?0:console.log('(Predicted) Time Left: '+Math.floor((time/(current_view*css_files.length+i)*((views.length*css_files.length)-((current_view*css_files.length+i))))/1000)+' seconds.');
+		console.log('[Loop '+((current_view*css_files.length+i)+1)+' out of '+views.length*css_files.length+']');
+		var animate_b = true,animate = setInterval(function(){
+			process.stdout.write("=");
+			time+=100;
+		},100);
+		var p = $.penthouse(
+			{
+				url: view.uri,
+				css: stylesheet,
+				width: view.browser.width,
+				height: view.browser.height,
+				forceInclude: [],
+				timeout: view.browser.timeout,
+				strict: view.browser.strict,
+				maxEmbeddedBase64Length: 1000,
+				userAgent: "Penthouse Critical Path CSS Generator",
+				renderWaitTime: view.browser.renderWaitTime,
+				blockJsRequests: view.browser.blockjs,
+				phantomJsOptions: {
+					//...
+				},
+				customPageHeaders: {
+					"Accept-Encoding":"identity"
+				}
+			})
+			.then(criticalCss => {
+				clearInterval(animate);
+				$.fs.appendFileSync(view.criticalDest,criticalCss);
+
+				if (css_files[i+1]!=null){
+					loop(i+1);
+					//next stylesheet
+				}
+				else if (views[current_view+1]!=null) {
+					current_view += 1;
+					loop(0);
+					//next view. reset stylesheet index selector.
+				}
+				else {
+					$.clear();
+					//completed all views. Exit.
+					$.fancyLog("\n\nCompleted Last View.\n\n");
+					$.fancyLog(Math.floor((time/(1000*60))%60)+'m '+((time/1000)%60).toFixed(1)+'s Total Time Elalpsed\n\n');
+					$.fancyLog("Application will close automatically. (may take some time...)\nOtherwise enter shortcut CTRL + C");
+				}
+				p = null;
+				return;
+			})
+			.catch(err => {
+				clearInterval(animate);
+				$.fancyLog(err);
+				console.log('\n\n(if error is related to timeout, try increasing the current view\'s timout in settings.');
+			});
+
 	}
-	else {
-		$.fancyLog('\n\n\tNo views set?\n\tCheck syntax in file: '+__filename);
-	}
-	
 }
-//array contains element. contains(array,object);
-function contains(n,r){for(var t=n.length;t--;)if(n[t]===r)return!0;return!1}
-//dump variable.
-//credit: http://www.openjs.com/scripts/others/dump_function_php_print_r.php
-function dump(e,o){var r="";o||(o=0);for(var f="",t=0;t<o+1;t++)f+="    ";if("object"==typeof e)for(var n in e){var p=e[n];"object"==typeof p?(r+=f+"'"+n+"' ...\n",r+=dump(p,o+1)):r+=f+"'"+n+"' => \""+p+'"\n'}else r="===>"+e+"<===("+typeof e+")";return r}
+
+/**
+ *
+ * Retrieves all (relative) paths of downloaded CSS files from target.
+ *
+ *	@return String[]
+ *
+ */
+function getCssFiles(callback){
+	files = [];
+	$.fs.readdirSync(download_dest).forEach(file => {
+		if (!contains(blacklist,file)){
+			files.push(download_dest+file);
+		}
+	});
+	return files;
+}
 
 //################################################################################################
-// Gulp Tasks
+//	Gulp Tasks.
 //################################################################################################
-$.gulp.task('criticalCss',function(){
+
+/**
+ *
+ * 	Gulp Task: Initlializes Setup: creates directories for downloaded CSS files, 
+ *	and output critical CSS files.
+ *
+ */
+$.gulp.task('init',function(){
+	$.fs.access(download_dest,(err)=>{
+		if (err){
+			$.mkdirp(download_dest,function(e){
+				return;
+			});
+		}
+	});
+	$.fs.access(output_dest,(err)=>{
+		if (err){
+			$.mkdirp(output_dest,function(e){
+				return;
+			});
+		}
+	});
+});
+
+/**
+ *
+ * Gulp Task: 	Generate Critical CSS.
+ *
+ */
+$.gulp.task('criticalCss',['init'],function(){
 	setTimeout(function(){
 		$.clear();
-		criticalLoop(0);
+		$.fancyLog("Preparing downloaded files...");
+		css_files = getCssFiles();
+		$.fancyLog(css_files);
+		$.fancyLog("Done.");
+		loop(0);
 	},1500);
-})
-$.gulp.task('default',function(){
-	console.log("woops! There is no set default task. Try `gulp criticalCss` to generate Critical CSS");
 });
+
+/**
+ *
+ * Gulp Task: 	Download target CSS files.
+ *
+ */
+$.gulp.task('downloadSiteCSS',['init'],function(){
+	var css_files = [];
+
+	function save(){
+		$.clear();
+		$.fancyLog("\n\tSaving Files...\n");
+		for (var i=0; i < css_files.length; i++){
+			$.download(css_files[i]).pipe($.gulp.dest(download_dest));
+		}
+	}
+
+	(async function() {
+		const instance = await $.phantom.create();
+		const page = await instance.createPage();
+		page.setting('javascriptEnabled').then(function(value){
+		    expect(value).toEqual(true);
+		});
+		await page.on('onResourceRequested', function(requestData) {
+			var request = requestData.url.split('.');
+			if (request.length>1 && request[request.length-1].toLowerCase() == 'css'){
+				$.fancyLog('CSS FILE:\t'+requestData.url+"\n");
+				css_files.push(requestData.url);
+			}
+		});
+		const status = await page.open(global_uri);
+
+		await instance.exit();
+		await save();
+	})();
+
+});
+
+/**
+ *
+ * Gulp Task: 	Default Task.
+ *
+ */
+$.gulp.task('default',function(){
+	console.log("\nwoops! There is no set default task. Try `gulp criticalCss` to generate Critical CSS.\n\nInstalled Packages:\n");
+	console.log($);
+	console.log("\n");
+});
+
+//################################################################################################
+//	Utils
+//################################################################################################
+function contains(n,r){for(var t=n.length;t--;)if(n[t]===r)return!0;return!1}
+function dump(e,o){var r="";o||(o=0);for(var f="",t=0;t<o+1;t++)f+="    ";if("object"==typeof e)for(var n in e){var p=e[n];"object"==typeof p?(r+=f+"'"+n+"' ...\n",r+=dump(p,o+1)):r+=f+"'"+n+"' => \""+p+'"\n'}else r="===>"+e+"<===("+typeof e+")";return r}
