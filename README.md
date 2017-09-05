@@ -19,6 +19,7 @@ A small step-by-step guide to setting up this project:
 Install mode_modules: `npm install`
 
 Open up gulpfile.js, and configure the options. For basic use,you should only need to specify the target website:
+
 `const global_uri = 'http://getbootstrap.com';`
 
 The target can be a remote location, or a local file (advise the use of an absolute path for the latter).
