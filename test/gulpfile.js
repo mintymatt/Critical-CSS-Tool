@@ -16,7 +16,7 @@ const pkg = require('./package.json');
 
 
 // @var global_uri = target document. Can be local or remote.
-const global_uri = "";
+const global_uri = "http://getbootstrap.com";
 
 // @var download_dest = folder to save downloaded target CSS files.
 const download_dest = './critical-css/download/';
@@ -228,7 +228,7 @@ $.gulp.task('init',function(){
  * Gulp Task: 	Generate Critical CSS.
  *
  */
-$.gulp.task('criticalCss',['init'],function(){
+$.gulp.task('generate',['init'],function(){
 	setTimeout(function(){
 		$.clear();
 		$.fancyLog("Preparing downloaded files...");
@@ -244,7 +244,7 @@ $.gulp.task('criticalCss',['init'],function(){
  * Gulp Task: 	Download target CSS files.
  *
  */
-$.gulp.task('downloadSiteCSS',['init'],function(){
+$.gulp.task('download',['init'],function(){
 	var css_files = [];
 
 	function save(){
@@ -282,7 +282,7 @@ $.gulp.task('downloadSiteCSS',['init'],function(){
  *
  */
 $.gulp.task('default',function(){
-	console.log("\nwoops! There is no set default task. Try `gulp criticalCss` to generate Critical CSS.\n\nInstalled Packages:\n");
+	console.log("No args. Refer to README.md for help on how to use this tool.\n\nInstalled packages:\n\n");
 	console.log($);
 	console.log("\n");
 });
