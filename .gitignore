@@ -1,4 +1,7 @@
 **/node_modules
 **/critical.*.css
 **/critical-css
+/gulpfile.js
+/package.json
+/package-lock.json
 
