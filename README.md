@@ -57,7 +57,7 @@ gulp minify
 gulp clean
 ```
 
-Under `/test` you can find a shell executable which automatically runs through these tasks in one go (except gulp clean).
+You could make this process easier by automatically calling each task after the other. Under `/test` you can find a shell executable which automatically runs through these tasks in one go (except gulp clean).
 
 ## Example use of critical CSS, using PHP
 
