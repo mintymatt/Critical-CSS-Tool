@@ -19,10 +19,10 @@ const pkg = require('./package.json');
 const global_uri = "";
 
 // @var download_dest = folder to save downloaded target CSS files.
-const download_dest = './criticalCss/download/';
+const download_dest = './critical-css/download/';
 
 // @var output_dest = folder to output critical files.
-const output_dest = './criticalCss/output/';
+const output_dest = './critical-css/output/';
 
 // @var blacklist = downloaded CSS files that should be ignored.
 var blacklist = [
@@ -209,12 +209,16 @@ function getCssFiles(callback){
 $.gulp.task('init',function(){
 	$.fs.access(download_dest,(err)=>{
 		if (err){
-			$.fs.mkdir(download_dest);
+			$.mkdirp(download_dest,function(e){
+				return;
+			});
 		}
 	});
 	$.fs.access(output_dest,(err)=>{
 		if (err){
-			$.fs.mkdir(output_dest);
+			$.mkdirp(output_dest,function(e){
+				return;
+			});
 		}
 	});
 });
@@ -278,7 +282,9 @@ $.gulp.task('downloadSiteCSS',['init'],function(){
  *
  */
 $.gulp.task('default',function(){
-	console.log("woops! There is no set default task. Try `gulp criticalCss` to generate Critical CSS");
+	console.log("\nwoops! There is no set default task. Try `gulp criticalCss` to generate Critical CSS.\n\nInstalled Packages:\n");
+	console.log($);
+	console.log("\n");
 });
 
 //################################################################################################
