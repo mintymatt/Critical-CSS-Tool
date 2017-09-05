@@ -14,7 +14,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-*Node.js
+*Node.js V8.2.1^
 
 ### Download
 
