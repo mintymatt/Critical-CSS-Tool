@@ -36,14 +36,10 @@ The target can be a remote location, or a local file (advise the use of an absol
 
 The proccess of this tool is as follows:
 
-*Set target in `gulpfile.js`
-
-*Define desired views.
-
-*Download the target's CSS files. Command: `gulp download`
-
-*Generate Critical CSS.	Command: `gulp critical`
-
+1.	Set target in `gulpfile.js`
+2.	Define desired views.
+3.	Download the target's CSS files. Command: `gulp download`
+4.	Generate Critical CSS.	Command: `gulp critical`
 
 Note that if your target is remote, you will need a connection throughout the proccess.
 
