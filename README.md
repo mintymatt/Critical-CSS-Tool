@@ -70,6 +70,8 @@ From here you would want to load any remaining stylehseets seperately (perhaps a
 
 With smaller downloaded CSS files you won't notice big file size differences between seperate critical CSS views.
 
+You can remove all downloaded CSS files and critical CSS files using the command `gulp clean`.
+
 ## License
 
 This project is licensed under the MIT License.
