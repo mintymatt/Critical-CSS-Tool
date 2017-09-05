@@ -18,10 +18,10 @@ const pkg = require('./package.json');
 // @var global_uri = target document. Can be local or remote.
 const global_uri = "";
 
-// @var download_dest = folder to save downloaded target CSS files.
+// @var download_dest = folder to save downloaded target CSS files. Include '/' at end.
 const download_dest = './critical-css/download/';
 
-// @var output_dest = folder to output critical files.
+// @var output_dest = folder to output critical files. Include '/' at end.
 const output_dest = './critical-css/output/';
 
 // @var blacklist = downloaded CSS files that should be ignored.
@@ -236,18 +236,52 @@ $.gulp.task('init',function(){
 
 /**
  *
+ * Gulp Task: 	Clear all saved CSS files (both downloaded and critical)
+ *
+ */
+ $.gulp.task('clean',function(){
+ 	setTimeout(function(){
+ 		$.clear();
+ 		var prompt = $.inquirer.createPromptModule();
+	 	var questions = {
+	 		type: "confirm",
+	 		name: "clean",
+	 		message: "\n\nAre you sure you want to delete all \nCSS downloads, and critical CSS files?",
+	 		default: "n",
+	 		choices: ['y','n']
+	 	};
+	 	prompt(questions).then(function(answer){
+	 		if (answer.clean){
+	 			$.del(download_dest+"**",{force:true});
+	 			$.del(output_dest+"**",{force:true});
+	 			console.log('\n\nDone.');
+	 		}
+	 		else {
+	 			console.log('\n\nAborted.');
+	 		}
+	 	});
+	},1000);
+});
+
+/**
+ *
  * Gulp Task: 	Generate Critical CSS.
  *
  */
 $.gulp.task('generate',['init'],function(){
-	setTimeout(function(){
-		$.clear();
-		$.fancyLog("Preparing downloaded files...");
-		css_files = getCssFiles();
-		$.fancyLog(css_files);
-		$.fancyLog("Done.");
-		loop(0);
-	},1500);
+	if (global_uri!=null && global_uri!=''){
+		setTimeout(function(){
+			$.clear();
+			$.fancyLog("Preparing downloaded files...");
+			css_files = getCssFiles();
+			$.fancyLog(css_files);
+			$.fancyLog("Done.");
+			loop(0);
+		},1500);
+	}
+	else {
+		console.log('\n\nNo target set. Edit variable `global_uri` in '+__filename);
+	}
 });
 
 /**
@@ -256,36 +290,40 @@ $.gulp.task('generate',['init'],function(){
  *
  */
 $.gulp.task('download',['init'],function(){
-	var css_files = [];
+	if (global_uri!=null && global_uri!=''){
+		var css_files = [];
 
-	function save(){
-		$.clear();
-		$.fancyLog("\n\tSaving Files...\n");
-		for (var i=0; i < css_files.length; i++){
-			$.download(css_files[i]).pipe($.gulp.dest(download_dest));
-		}
-		console.log('\nDone. run `gulp generate` to create Critical CSS.');
-	}
-
-	(async function() {
-		const instance = await $.phantom.create();
-		const page = await instance.createPage();
-		page.setting('javascriptEnabled').then(function(value){
-		    expect(value).toEqual(true);
-		});
-		await page.on('onResourceRequested', function(requestData) {
-			var request = requestData.url.split('.');
-			if (request.length>1 && request[request.length-1].toLowerCase() == 'css'){
-				$.fancyLog('CSS FILE:\t'+requestData.url+"\n");
-				css_files.push(requestData.url);
+		function save(){
+			$.clear();
+			$.fancyLog("\n\tSaving Files...\n");
+			for (var i=0; i < css_files.length; i++){
+				$.download(css_files[i]).pipe($.gulp.dest(download_dest));
 			}
-		});
-		const status = await page.open(global_uri);
+			console.log('\nDone. run `gulp generate` to create Critical CSS.');
+		}
 
-		await instance.exit();
-		await save();
-	})();
+		(async function() {
+			const instance = await $.phantom.create();
+			const page = await instance.createPage();
+			page.setting('javascriptEnabled').then(function(value){
+			    expect(value).toEqual(true);
+			});
+			await page.on('onResourceRequested', function(requestData) {
+				var request = requestData.url.split('.');
+				if (request.length>1 && request[request.length-1].toLowerCase() == 'css'){
+					$.fancyLog('CSS FILE:\t'+requestData.url+"\n");
+					css_files.push(requestData.url);
+				}
+			});
+			const status = await page.open(global_uri);
 
+			await instance.exit();
+			await save();
+		})();
+	}
+	else {
+		console.log('\n\nNo target set. Edit variable `global_uri` in '+__filename);
+	}
 });
 
 //################################################################################################
