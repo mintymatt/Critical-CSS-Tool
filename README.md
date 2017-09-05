@@ -47,6 +47,16 @@ The proccess of this tool is as follows:
 
 Note that if your target is remote, you will need a connection throughout the proccess.
 
+## All tasks (commands)
+
+```
+gulp init
+gulp download
+gulp generate
+gulp minify
+gulp clean
+```
+
 ## Example use of critical CSS, using PHP
 
 Critical CSS should only need to be used once, as after the first complete load of a page the user should have a cached edition of our stylesheets. Therefore we can use a cookie to determine whether a visitor has seen our website yet, and decide if we need to provide them with ciritical CSS. Here is a basic example (taken from `/test`):
