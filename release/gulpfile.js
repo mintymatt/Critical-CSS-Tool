@@ -243,8 +243,8 @@ $.gulp.task('init',function(){
  	$.gulp.src(output_dest+'*.css')
         .pipe($.cssmin())
         .pipe($.rename({suffix: '.min'}))
-        .pipe($.gulp.dest(output_dest));
-    console.log("\n\nCompleted. Minified files renamed: `[filename].min.css`\n\n");
+        .pipe($.gulp.dest(output_dest+"/min/"));
+    console.log("\n\nCompleted. Minified files saved as: `min/[filename].min.css`\n\n");
  });
 
 /**
