@@ -14,11 +14,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-A small step-by-step guide to setting up this project:
+`git clone https://github.com/mintymatt/criticalcssgen.git`
+
+## Setup
 
 Install mode_modules: `npm install`
 
-Open up gulpfile.js, and configure the options. For basic use,you should only need to specify the target website:
+Open up gulpfile.js, and configure the options. For basic use, you should only need to specify the target website:
 
 `const global_uri = 'http://getbootstrap.com';`
 
