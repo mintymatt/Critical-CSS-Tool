@@ -202,6 +202,17 @@ function getCssFiles(callback){
 
 /**
  *
+ * Gulp Task: 	Default Task.
+ *
+ */
+$.gulp.task('default',function(){
+	console.log("No args. Refer to README.md for help on how to use this tool.\n\nInstalled packages:\n\n");
+	console.log($);
+	console.log("\n");
+});
+
+/**
+ *
  * 	Gulp Task: Initlializes Setup: creates directories for downloaded CSS files, 
  *	and output critical CSS files.
  *
@@ -253,6 +264,7 @@ $.gulp.task('download',['init'],function(){
 		for (var i=0; i < css_files.length; i++){
 			$.download(css_files[i]).pipe($.gulp.dest(download_dest));
 		}
+		console.log('\nDone. run `gulp generate` to create Critical CSS.');
 	}
 
 	(async function() {
@@ -274,17 +286,6 @@ $.gulp.task('download',['init'],function(){
 		await save();
 	})();
 
-});
-
-/**
- *
- * Gulp Task: 	Default Task.
- *
- */
-$.gulp.task('default',function(){
-	console.log("No args. Refer to README.md for help on how to use this tool.\n\nInstalled packages:\n\n");
-	console.log($);
-	console.log("\n");
 });
 
 //################################################################################################
