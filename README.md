@@ -68,7 +68,7 @@ From here you would want to load any remaining stylehseets seperately (perhaps a
 
 ## Notes
 
-With smaller downloaded CSS files you won't motice big file size differences between seperate critical CSS views.
+With smaller downloaded CSS files you won't notice big file size differences between seperate critical CSS views.
 
 ## License
 
