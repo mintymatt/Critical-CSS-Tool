@@ -31,7 +31,7 @@ https://github.com/mintymatt/criticalcssgen/archive/master.zip
 1.	Install Modules
 2.	Edit `gulpfile.js`
 
-Make sure you have Node.js installed. Open up a console on your local machine and `cd` to the `/release` directory. Install the Node Modules: `npm install`.
+Make sure you have the Prerequisites above installed. Open up a console on your local machine and `cd` to the `/release` directory. Install the Node Modules: `npm install`.
 
 Edit `gulpfile.js`, and configure the options. For basic use, you should only need to specify the target website: 
 
