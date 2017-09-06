@@ -17,6 +17,7 @@ https://css-tricks.com/gulp-for-beginners/
 ### Prerequisites
 
 *Node.js V8.2.1^ https://nodejs.org/en/download/current/
+*Python https://www.python.org/downloads/
 
 ### Download
 
