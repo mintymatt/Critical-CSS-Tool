@@ -51,34 +51,35 @@ Note that if your target is remote, you will need a connection throughout the pr
 
 ## All tasks (commands)
 
-`gulp init`:
+`gulp init`
 
 Intializes Tool setup, creates `/critical-css/download` and `/critical-css/output` (customizable within `gulpfile.js`).
 Automatically called by `gulp download` and `gulp generate`.
 
 
-`gulp download`:
+`gulp download`
 
 Download CSS files from target.
 
 
-`gulp generate`:
+`gulp generate`
 
 Generate Critical CSS based on downloaded CSS files, and target document.
 
 
-`gulp minify`:
+`gulp minify`
 
 Minify generated CSS files.
 
 
-`gulp clean`:
+`gulp clean`
 
 Delete downloaded CSS files, and generated Critical CSS.
 
+------------------------------------------------------------------------------------------------------------------------------
 
-
-You could make this process easier by automatically calling each task after the other. Under `/test` you can find a shell executable which automatically runs through these tasks in one go (except gulp clean).
+You could make this process easier, by automatically calling each task after the other. 
+Under `/test` you can find a shell executable which automatically runs through these tasks in one go (except `gulp clean`).
 
 ## Example use of critical CSS, using PHP
 
