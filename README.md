@@ -1,6 +1,6 @@
 # Critical-CSS Tool
 
-A tool that utilises Penthouse, PhantomJS, and other NPM Packages, to generate clean critical CSS.
+A tool that utilises Penthouse, PhantomJS, and other NPM Packages, to easily generate clean Critical CSS.
 
 More information about Critical CSS: 
 
@@ -10,7 +10,7 @@ https://css-tricks.com/authoring-critical-fold-css/
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. To use this tool you may need a basic understanding of Node.js and Gulp.
+To use this tool you may need a basic understanding of Node.js and Gulp.
 
 https://css-tricks.com/gulp-for-beginners/
 
