@@ -186,7 +186,7 @@ function loop(i){
  *	@return String[]
  *
  */
-function getCssFiles(callback){
+function getCssFiles(){
 	files = [];
 	$.fs.readdirSync(download_dest).forEach(file => {
 		if (!contains(blacklist,file)){
