@@ -343,27 +343,34 @@ $.gulp.task('download',['init'],function(){
 		}
 
 		(async function() {
-			const instance = await $.phantom.create();
-			const page = await instance.createPage();
-			await page.on('onResourceRequested', function(requestData) {
-				var request = requestData.url.split('.');
-				if (request.length>1 && request[request.length-1].toLowerCase() == 'css' && requestData.url.length>0){
-					//$.fancyLog('CSS FILE: '+requestData.url);
-					css_files.push(requestData.url);
-				}
-			});
-			await page.on('onError',function(err){
-				console.log("\nPage Error: "+err+"\n");
-			}).catch(function(){});
+			try {
+				const instance = await $.phantom.create();
+				const page = await instance.createPage();
+				await page.on('onResourceRequested', function(requestData) {
+					var request = requestData.url.split('.');
+					if (request.length>1 && request[request.length-1].toLowerCase() == 'css' && requestData.url.length>0){
+						//$.fancyLog('CSS FILE: '+requestData.url);
+						css_files.push(requestData.url);
+					}
+				});
+				await page.on('onError',function(err){
+					console.log("\nPage Error: "+err+"\n");
+				}).catch(function(){});
 
-			await page.open(global_uri).then(function(status){
-				console.log("PhantomJS Finished.");
-			}).catch(function(err){
-				console.log("PhantomJS Page Error:\n"+err+"\n");
-			});
+				await page.open(global_uri).then(function(status){
+					console.log("PhantomJS Finished.");
+				}).catch(function(err){
+					console.log("PhantomJS Page Error:\n"+err+"\n");
+				});
 
-			await instance.exit();
-			await save();
+				await instance.exit();
+				await save();
+			}
+			catch(err) {
+				console.log("\nFailed to download CSS files. Error:");
+				console.log(err);
+			}
+			
 		})();
 	}
 	else {
