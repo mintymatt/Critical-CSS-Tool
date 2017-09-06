@@ -24,6 +24,10 @@ const download_dest = './critical-css/download/';
 // @var output_dest = folder to output critical files. Include '/' at end.
 const output_dest = './critical-css/output/';
 
+// @var force_http = if true, all downloaded CSS files will be retrieved using HTTP only. 
+// Useful for invalid SSL certificates. USE WITH CAUTION
+const force_http = false;
+
 // @var blacklist = downloaded CSS files that should be ignored.
 var blacklist = [
 	''
@@ -305,30 +309,52 @@ $.gulp.task('generate',['init'],function(){
 $.gulp.task('download',['init'],function(){
 	if (global_uri!=null && global_uri!=''){
 		var css_files = [];
-
 		function save(){
 			$.clear();
-			$.fancyLog("\n\tSaving Files...\n");
-			for (var i=0; i < css_files.length; i++){
-				$.download(css_files[i]).pipe($.gulp.dest(download_dest));
+			console.log("\n(Attempt) Saving Files...\n");
+
+			if (force_http){
+				console.log("\nNOTE: force HTTP enabled.\n");
+				process.env.npm_config_strict_ssl = false;
 			}
-			console.log('\nDone. run `gulp generate` to create Critical CSS.');
+			// console.log(css_files);return;
+
+			for (var i=0; i < css_files.length; i++){
+				if (!(typeof css_files[i] == "undefined")){
+
+					if (force_http){
+						css_files[i] = css_files[i].replace(/^(https)/,'http');
+					}
+					
+					console.log("("+i.pad(2)+") "+css_files[i]);
+
+					$.download(css_files[i],download_dest).catch(function(err){
+						console.log("\nFailed to download file:\n"+err);
+						console.log("(if error is certificate related, set `force_http` to true\nin gulpfile.js and try again.)");
+					});
+				}
+			}
 		}
 
 		(async function() {
 			const instance = await $.phantom.create();
 			const page = await instance.createPage();
-			page.setting('javascriptEnabled').then(function(value){
-			    expect(value).toEqual(true);
-			});
 			await page.on('onResourceRequested', function(requestData) {
 				var request = requestData.url.split('.');
-				if (request.length>1 && request[request.length-1].toLowerCase() == 'css'){
-					$.fancyLog('CSS FILE:\t'+requestData.url+"\n");
+				if (request.length>1 && request[request.length-1].toLowerCase() == 'css' && requestData.url.length>0){
+					//$.fancyLog('CSS FILE: '+requestData.url);
 					css_files.push(requestData.url);
 				}
 			});
-			const status = await page.open(global_uri);
+			await page.on('onError',function(err){
+				console.log("\nPage Error: "+err+"\n");
+			}).catch(function(){});
+
+			await page.open(global_uri).then(function(status){
+				console.log("PhantomJS Finished.");
+			}).catch(function(err){
+				console.log("PhantomJS Page Error:\n"+err+"\n");
+			});
 
 			await instance.exit();
 			await save();
@@ -343,4 +369,5 @@ $.gulp.task('download',['init'],function(){
 //	Utils
 //################################################################################################
 function contains(n,r){for(var t=n.length;t--;)if(n[t]===r)return!0;return!1}
+Number.prototype.pad=function(r){for(var t=String(this);t.length<(r||2);)t="0"+t;return t};
 function dump(e,o){var r="";o||(o=0);for(var f="",t=0;t<o+1;t++)f+="    ";if("object"==typeof e)for(var n in e){var p=e[n];"object"==typeof p?(r+=f+"'"+n+"' ...\n",r+=dump(p,o+1)):r+=f+"'"+n+"' => \""+p+'"\n'}else r="===>"+e+"<===("+typeof e+")";return r}
