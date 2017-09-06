@@ -123,8 +123,13 @@ function loop(i){
 		$.fancyLog('\n\nView Name: '+view.name+'\nStylesheet: '+stylesheet+"\nURI: "+view.uri+"\n");
 		console.log('\n\nBrowser options:\n'+dump(view.browser));
 		console.log('Running Penthouse (and PhantomJS).\n');
-		console.log(Math.floor((time/(1000*60))%60)+'m '+((time/1000)%60).toFixed(1)+'s Time Elalpsed\n');
-		time==0?0:console.log('(Predicted) Time Left: '+Math.floor((time/(current_view*css_files.length+i)*((views.length*css_files.length)-((current_view*css_files.length+i))))/1000)+' seconds.');
+
+		var total_time = Math.floor((time/(current_view*css_files.length+i)*((views.length*css_files.length))/1000));
+		var time_left = Math.floor((time/(current_view*css_files.length+i)*((views.length*css_files.length)-((current_view*css_files.length+i))))/1000);
+		var progress = (100-((time_left/total_time)*100)).toFixed(1);
+
+		time==0?0:console.log('Completed '+progress+"%\nTotal Predicted Time: "+total_time+"s, "+time_left+"s Remaining.");
+
 		console.log('[Loop '+((current_view*css_files.length+i)+1)+' out of '+views.length*css_files.length+']');
 		var animate_b = true,animate = setInterval(function(){
 			process.stdout.write("=");
@@ -292,6 +297,7 @@ $.gulp.task('generate',['init'],function(){
 			css_files = getCssFiles();
 			$.fancyLog(css_files);
 			$.fancyLog("Done.");
+			process.setMaxListeners(0);
 			loop(0);
 		},1500);
 	}
@@ -307,6 +313,7 @@ $.gulp.task('generate',['init'],function(){
  */
 $.gulp.task('download',['init'],function(){
 	if (global_uri!=null && global_uri!=''){
+		console.log("Starting PhantomJS...");
 		var css_files = [];
 		function save(){
 			$.clear();
