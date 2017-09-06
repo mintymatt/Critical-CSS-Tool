@@ -26,34 +26,57 @@ https://github.com/mintymatt/criticalcssgen/archive/master.zip
 
 ## Setup
 
-Install node_modules: `npm install`
+1.	Install Modules
+2.	Edit `gulpfile.js`
 
-Open up gulpfile.js, and configure the options. For basic use, you should only need to specify the target website:
+Make sure you have Node.js installed. Open up a console on your local machine and `cd` to the `/release` directory. Install the Node Modules: `npm install`.
 
-`const global_uri = 'http://getbootstrap.com';`
+Edit `gulpfile.js`, and configure the options. For basic use, you should only need to specify the target website: 
 
-The target can be a remote location, or a local file (advise the use of an absolute path for the latter).
+`const global_uri = 'http://getbootstrap.com'; //example URI`
+
+The target can be a remote location, or a local file (advise the use of an absolute path for the latter). You may also wish to cinfigure the views to your own preference. (you can add or remove views as you wish, note that each view should have the same amount of parameters).
 
 ## Usage
 
-The proccess of this tool is as follows:
+The proccess of using this tool is as follows:
 
 1.	Set target in `gulpfile.js`
 2.	Define desired views.
 3.	Download the target's CSS files. Command: `gulp download`
 4.	Generate Critical CSS.	Command: `gulp critical`
+5.	(Optional) Minify Critical CSS. Command: `gulp minify`
 
 Note that if your target is remote, you will need a connection throughout the proccess.
 
 ## All tasks (commands)
 
-```
-gulp init
-gulp download
-gulp generate
-gulp minify
-gulp clean
-```
+`gulp init`:
+
+Intializes Tool setup, creates `/critical-css/download` and `/critical-css/output` (customizable within `gulpfile.js`).
+Automatically called by `gulp download` and `gulp generate`.
+
+
+`gulp download`:
+
+Download CSS files from target.
+
+
+`gulp generate`:
+
+Generate Critical CSS based on downloaded CSS files, and target document.
+
+
+`gulp minify`:
+
+Minify generated CSS files.
+
+
+`gulp clean`:
+
+Delete downloaded CSS files, and generated Critical CSS.
+
+
 
 You could make this process easier by automatically calling each task after the other. Under `/test` you can find a shell executable which automatically runs through these tasks in one go (except gulp clean).
 
