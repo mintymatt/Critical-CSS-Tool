@@ -31,7 +31,7 @@ https://github.com/mintymatt/criticalcssgen/archive/master.zip
 1.	Install Modules
 2.	Edit `gulpfile.js`
 
-Make sure you have Node.js installed. Open up a console on your local machine and `cd` to the `/release` directory. Install the Node Modules: `npm install`.
+Make sure you have the Prerequisites above installed. Open up a console on your local machine and `cd` to the `/release` directory. Install the Node Modules: `npm install`.
 
 Edit `gulpfile.js`, and configure the options. For basic use, you should only need to specify the target website: 
 
@@ -101,6 +101,11 @@ Critical CSS should only need to be used once, as after the first complete load 
 
 ```
 From here you would want to load any remaining stylehseets seperately (perhaps after page load with JavaScript and noscript support).
+
+
+## Known Problems
+
+Sometimes SSL certificates of downloaded files may not be accepted, and causes `gulp download` to fail. There is a boolean option called `force_http` you could set as true which should fix this problem. However **USE WITH CAUTION**: you could open yourself up to man-in-the-middle attacks, and other security issues.
 
 ## Notes
 
