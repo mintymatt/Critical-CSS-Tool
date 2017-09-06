@@ -1,15 +1,4 @@
 //################################################################################################
-//	Load Plugins
-//################################################################################################
-
-const $ = require('gulp-load-plugins')({
-    pattern: ['*'],
-    scope: ['devDependencies']
-});
-const pkg = require('./package.json');
-
-
-//################################################################################################
 //	Options. Customize as needed...
 //################################################################################################
 
@@ -83,6 +72,16 @@ var views = [
 		}
 	}
 ];
+
+//################################################################################################
+//	Load Plugins
+//################################################################################################
+
+const $ = require('gulp-load-plugins')({
+    pattern: ['*'],
+    scope: ['devDependencies']
+});
+const pkg = require('./package.json');
 
 
 //################################################################################################
@@ -248,7 +247,7 @@ $.gulp.task('init',function(){
         .pipe($.cssmin())
         .pipe($.rename({suffix: '.min'}))
         .pipe($.gulp.dest(output_dest+"/min/"));
-    console.log("\n\nCompleted. Minified files saved as: `min/[filename].min.css`\n\n");
+    console.log("\n\nCompleted. Minified files saved as: "+output_dest+"`min/[filename].min.css`\n\n");
  });
 
 /**
