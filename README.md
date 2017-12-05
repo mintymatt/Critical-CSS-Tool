@@ -46,7 +46,7 @@ The proccess of using this tool is as follows:
 1.	Set target in `gulpfile.js`
 2.	Define desired views.
 3.	Download the target's CSS files. Command: `gulp download`
-4.	Generate Critical CSS.	Command: `gulp critical`
+4.	Generate Critical CSS.	Command: `gulp generate`
 5.	(Optional) Minify Critical CSS. Command: `gulp minify`
 
 Note that if your target is remote, you will need a connection throughout the proccess.
